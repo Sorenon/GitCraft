@@ -1,9 +1,14 @@
-# Fabric Example Mod
+# GitCraft
 
-## Setup
+A Minecraft mod to allow saving and loading structures to/from git repositories
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Usage
+```
+Create a new repository
+/git_init [x,y,z] [x1,y1,z1]
+e.g. /git_init 0 60 0 10 70 10
 
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+Create a repository by copying an existing one
+/git_clone "url" [x,y,z]
+e.g. /git_clone https://github.com/Sorenon/my_house 0 0 0
+```
