@@ -10,5 +10,5 @@ e.g. /git_init 0 60 0 10 70 10
 
 Create a repository by copying an existing one
 /git_clone "url" [x,y,z]
-e.g. /git_clone https://github.com/Sorenon/my_house 0 0 0
+e.g. /git_clone "https://github.com/Sorenon/my_house" 0 0 0
 ```
