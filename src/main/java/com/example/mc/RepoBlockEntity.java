@@ -5,9 +5,12 @@ import com.example.GCBlocks;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -54,6 +57,12 @@ public class RepoBlockEntity extends BlockEntity {
     public void setLevel(Level level) {
         super.setLevel(level);
         if (level instanceof ServerLevel && this.name != null) {
+            if (this.boundingBox.isInside(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ())) {
+                level.setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 2);
+                ((ServerLevel) level).getServer().sendSystemMessage(Component.literal("Cannot place repo within boundaries"));
+                return;
+            }
+
             if (git == null) {
                 try {
                     git = Git.open(this.getPath().toFile());
@@ -83,27 +92,18 @@ public class RepoBlockEntity extends BlockEntity {
         tag.putBoolean("powered", powered);
     }
 
-    public void openScreen(ServerPlayer serverPlayer) {
+    public void onUse(ServerPlayer serverPlayer, InteractionHand interactionHand) {
         if (this.git == null) return;
 
-//        var commits = new ArrayList<OpenRepoGuiPacket.CommitDetails>();
-//
-//        try {
-//            this.git.log().call().forEach(revCommit -> commits.add(new OpenRepoGuiPacket.CommitDetails(revCommit.getName(), revCommit.getCommitTime(), revCommit.getFullMessage())));
-//        } catch (GitAPIException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        var buf = PacketByteBufs.create();
-//        buf.writeUtf(this.name);
-//        buf.writeInt(commits.size());
-//        for (var commit : commits) {
-//            buf.writeUtf(commit.id());
-//            buf.writeInt(commit.time());
-//            buf.writeUtf(commit.message());
-//        }
-//
-//        ServerPlayNetworking.send(serverPlayer, ExampleMod.OPEN_SCREEN, buf);
+        var stack = serverPlayer.getItemInHand(interactionHand);
+        if (stack.getItem() == ExampleMod.RESET) {
+            try {
+                GCBlocks.load(level, this.boundingBox, this.getPath().resolve("blocks.gc"));
+            } catch (IOException | CommandSyntaxException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
 
         try {
             replayCommits();

@@ -33,7 +33,7 @@ public class RepoBlock extends BaseEntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof RepoBlockEntity) {
             if (player instanceof ServerPlayer) {
-                ((RepoBlockEntity) blockEntity).openScreen((ServerPlayer) player);
+                ((RepoBlockEntity) blockEntity).onUse((ServerPlayer) player, interactionHand);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

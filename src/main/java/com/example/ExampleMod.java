@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.mc.DebugItem;
 import com.example.mc.RepoBlock;
 import com.example.mc.RepoBlockEntity;
 import com.mojang.brigadier.StringReader;
@@ -40,6 +39,8 @@ public class ExampleMod implements ModInitializer {
     public static final RepoBlock REPO_BLOCK = new RepoBlock(BlockBehaviour.Properties.of());
     public static final BlockEntityType<RepoBlockEntity> REPO_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(RepoBlockEntity::new, REPO_BLOCK).build();
     public static final BlockItem REPO_ITEM = new BlockItem(REPO_BLOCK, new Item.Properties());
+    public static final Item RESET = new Item(new Item.Properties());
+    public static final Item STATUS = new Item(new Item.Properties());
 
     @Override
     public void onInitialize() {
@@ -61,7 +62,8 @@ public class ExampleMod implements ModInitializer {
         });
 
 
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("gitcraft", "debug"), new DebugItem(new Item.Properties()));
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("gitcraft", "reset"), RESET);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("gitcraft", "status"), STATUS);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("gitcraft", "repo"), REPO_ITEM);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation("gitcraft", "repo"), REPO_BLOCK);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation("gitcraft", "repo"), REPO_BLOCK_ENTITY);
