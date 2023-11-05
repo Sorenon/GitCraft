@@ -1,0 +1,5 @@
+{
+  "block.gitcraft.repo" : "Git Repository",
+  "item.gitcraft.reset" : "Git Reset",
+  "item.gitcraft.status": "Git Status"
+}
